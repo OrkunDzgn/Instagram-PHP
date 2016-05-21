@@ -11,12 +11,13 @@
 	function uploadImage(){
 		global $new_doc_name;
 		$extensions = array('image/jpeg' => '.jpeg',
+						'image/jpg' => '.jpg',
                         'image/png' => '.png',
                         'image/gif' => '.gif'
                        );
 		$doc_type = mime_content_type($_FILES['photo']['tmp_name']); 
 
-		if($doc_type == 'image/jpeg' || $doc_type == 'image/png' || $doc_type == 'image/gif'){
+		if($doc_type == 'image/jpeg' || $doc_type == 'image/png' || $doc_type == 'image/gif' || $doc_type == 'image/jpg'){
 			$new_doc_name = uniqid() . $extensions[$doc_type];
 			move_uploaded_file($_FILES['photo']['tmp_name'], $_SERVER['DOCUMENT_ROOT'] . '/uploads/' . $new_doc_name);
 			return true;
