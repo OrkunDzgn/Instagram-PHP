@@ -3,11 +3,12 @@
 
 	if(!empty($_POST)){
 		if($_POST['pass'] == $_POST['passRepeat']){
-			$userRegister = $database->prepare('INSERT INTO users SET username = :username, password = :password, email = :email');
+			$userRegister = $database->prepare('INSERT INTO users SET username = :username, password = :password, email = :email, profilePicture = :profilePicture');
 			$success = $userRegister->execute([
 				':username' => $_POST['uname'], 
 				':password' => password_hash($_POST['pass'], PASSWORD_BCRYPT), 
-				':email' => $_POST['email']
+				':email' => $_POST['email'],
+				':profilePicture' => 'egg.png'
 				]);
 			
 			if($success){

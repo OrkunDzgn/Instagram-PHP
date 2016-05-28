@@ -69,4 +69,26 @@
 			}
 		}
 	}
+
+
+
+	function CheckFollowing($userID){
+		global $_SESSION;
+		global $database;
+		if($userID != $_SESSION['user']['id']){
+			$getFollow = $database->prepare('SELECT * FROM `follows` WHERE follower = :userid AND followed = :postuserid');
+			$getFollow->execute([
+							':userid' => $_SESSION['user']['id'],
+							'postuserid' => $userID
+							]); 
+			if($getFollow->rowCount() > 0) {
+				echo 'Takibi Bırak';
+				return 0; //Unsubscribe button
+			}else{
+				echo 'Takip Et';
+				return 1; //Subscribe button
+			}
+		}
+		return 2; //User enters his own profile - No subscribe button
+	}
 ?>
