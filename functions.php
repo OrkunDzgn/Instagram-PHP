@@ -44,6 +44,47 @@
 	}
 
 
+	function checkLiked($post_id) {
+		global $_SESSION;
+		global $database;
+
+		$sqlCheckLiked = $database->prepare('SELECT * FROM `likes` WHERE user_id = :user_id AND post_id = :post_id');
+		$success = $sqlCheckLiked->execute(array(
+				':user_id'=>$_SESSION['user']['id'],
+				':post_id' => $post_id
+		));
+		if($sqlCheckLiked->rowCount() > 0)
+			return true;
+		else
+			return false;
+	}
+
+
+	function likeDislikePost(){
+		global $_SESSION;
+		global $database;
+
+		$userLiked = checkLiked($_POST['post_id']);
+
+		if(!$userLiked){
+			$sqlLikePost = $database->prepare('INSERT INTO likes SET user_id = :user_id, post_id = :post_id');
+			$success = $sqlLikePost->execute(array(
+					':user_id'=>$_SESSION['user']['id'],
+					':post_id' => $_POST['post_id']
+				));
+			return true;
+		}
+		else{
+			$sqlDislikePost = $database->prepare('DELETE FROM likes WHERE user_id = :user_id AND post_id = :post_id');
+			$success = $sqlDislikePost->execute(array(
+					':user_id'=>$_SESSION['user']['id'],
+					':post_id' => $_POST['post_id']
+				));
+			return false;
+		}
+	}
+
+
 
 	function login(){
 		global $database;

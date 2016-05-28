@@ -27,6 +27,7 @@
 	<meta charset="UTF-8">
 	<title>Instagram</title>
 	<link rel="stylesheet" type="text/css" href="css/styles.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
 </head>
 <body>
 	<header>
@@ -54,7 +55,7 @@
 				</div>
 				<img src="/uploads/<?php echo $value['image'] ?> ">
 				<div class="likes">
-							<a href="<?php echo 'feed.php?post_id=' . $value['id']; ?>">Like</a>
+					<button type="like" id='post<?php echo $value['id']; ?>' onclick="LikePost(<?php echo $value['id']; ?>)"><?php echo (checkLiked($value['id'])?'Dislike':'Like'); ?></button>
 				</div>
 
 				<div class="description"> <?php echo $value['description']; ?> </div>
@@ -68,9 +69,23 @@
 	</footer>
 
 	<script type="text/javascript">
-		function myFunction(){
-
-		}
+	    function LikePost(sentPostID) {
+		    $.ajax({
+		        url:"likepost.php", //the page containing php script
+		        type: "POST", //request type
+		        data: {'post_id': sentPostID ,'submit':true},
+		        success:function(result){
+		        	alert(result);
+		        	result = JSON.parse(result);
+		        	var text;
+		        	if(result == false)
+		        		text = 'Like';
+		        	else
+		        		text = 'Dislike';
+		        	$('#post' + sentPostID).text(text);
+		    	}
+		    });
+		 }
 	</script>
 
 </body>
